@@ -1,0 +1,1031 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mo Li">
+  <meta name="keywords" content="Data Science, Big Data, Artificial Intelligence, Python, R, Scala, Stata, C, HTML">
+  
+    <meta name="description" content="This article details Assignment 2 in the Bayesian Statistics course. It includes the use of Python for data manipulation and statistical analysis, focusing on fitting a normal distribution to a numeri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bayesian Statistics - Assignment 2">
+<meta property="og:url" content="https://dseidhit.github.io/2023/05/22/Bayesian%20Statistics%20-%20Assignment%202/index.html">
+<meta property="og:site_name" content="Mo Li&#39;s Blog">
+<meta property="og:description" content="This article details Assignment 2 in the Bayesian Statistics course. It includes the use of Python for data manipulation and statistical analysis, focusing on fitting a normal distribution to a numeri">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dseidhit.github.io/img/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BB%9F%E8%AE%A1-Assignment2.png">
+<meta property="article:published_time" content="2023-05-21T17:20:36.068Z">
+<meta property="article:modified_time" content="2023-05-25T12:12:44.555Z">
+<meta property="article:author" content="Mo Li">
+<meta property="article:tag" content="Bayesian Statistics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dseidhit.github.io/img/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BB%9F%E8%AE%A1-Assignment2.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Bayesian Statistics - Assignment 2 - Mo Li&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"dseidhit.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Mo Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Bayesian Statistics - Assignment 2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Mo Li
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-22 01:20" pubdate>
+          May 22, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          196 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Bayesian Statistics - Assignment 2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>Bayesian Statistics</h1>
+<h2 id="Li-Mo">Li Mo</h2>
+<h2 id="Mathematics-Class-2">Mathematics Class 2</h2>
+<h2 id="Student-ID-200810216">Student ID: 200810216</h2>
+<p>This is Assignment 2, where we will be using Bayesian statistics.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">!pip install kaggle<br>!<span class="hljs-built_in">mkdir</span> ~/.kaggle<br>!<span class="hljs-built_in">cp</span> kaggle.json ~/.kaggle/<br>!<span class="hljs-built_in">chmod</span> 600 ~/.kaggle/kaggle.json<br>!kaggle competitions download -c titanic<br></code></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-class"><span class="hljs-keyword">data</span> = pd.read_csv(&#x27;<span class="hljs-title">train</span>.<span class="hljs-title">csv&#x27;</span>)</span><br><span class="hljs-class"><span class="hljs-keyword">data</span>.head()</span><br></code></pre></td></tr></table></figure>
+<h2 id="Task-1">Task 1</h2>
+<p>In this task, we will select the numerical variable ‘Age’ from our dataset and apply the structure of normal distribution to fit it with the likelihood function. Then we will use an appropriate non-informative prior distribution to deduct the posterior distribution.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs routeros">import numpy as np<br>import matplotlib.pyplot as plt<br><span class="hljs-keyword">from</span> scipy.stats import norm<br><span class="hljs-comment"># Select &#x27;Age&#x27; column and remove NaN values</span><br>age = data[<span class="hljs-string">&#x27;Age&#x27;</span>].dropna().values<br><span class="hljs-comment"># Calculate the mean and standard deviation of &#x27;Age&#x27;</span><br>mu, std = np.mean(age), np.std(age)<br><span class="hljs-comment"># Plot the histogram of &#x27;Age&#x27;</span><br>plt.hist(age, <span class="hljs-attribute">bins</span>=30, <span class="hljs-attribute">density</span>=<span class="hljs-literal">True</span>, <span class="hljs-attribute">alpha</span>=0.6, <span class="hljs-attribute">color</span>=<span class="hljs-string">&#x27;g&#x27;</span>)<br><span class="hljs-comment"># Plot the PDF of the normal distribution using calculated mean</span><br><span class="hljs-comment"># and standard deviation</span><br>xmin, xmax = plt.xlim()<br>x = np.linspace(xmin, xmax, 100)<br>p = norm.pdf(x, mu, std)<br>plt.plot(x, p, <span class="hljs-string">&#x27;k&#x27;</span>, <span class="hljs-attribute">linewidth</span>=2)<br>title = <span class="hljs-string">&quot;Fit results: mu = %.2f,  std = %.2f&quot;</span> % (mu, std)<br>plt.title(title)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p><img src="https://ucarecdn.com/863e0ea3-09fc-4479-95fa-2671790739f9/Assignment21.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<h2 id="Task-1-Continued">Task 1 (Continued)</h2>
+<p>Now, we will use a non-informative prior distribution to deduct the posterior distribution. In this case, we will use a uniform distribution as the non-informative prior. Then, we will use Bayes’ rule to calculate the posterior distribution.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-keyword">from</span> scipy.stats import uniform<br><span class="hljs-comment"># Define the parameters of the uniform distribution (non-informative prior)</span><br>a, b = 0, 100<br><span class="hljs-comment"># Calculate the posterior distribution using Bayes&#x27; rule</span><br><span class="hljs-comment"># In this case, the posterior distribution is also a normal </span><br><span class="hljs-comment"># distribution with updated parameters</span><br>mu_posterior = (np.sum(age) + a<span class="hljs-number">*b</span>) / (len(age) + b)<br>std_posterior = np.sqrt((np.sum((age - mu_posterior)*<span class="hljs-number">*2</span>) + 2<span class="hljs-number">*a</span><span class="hljs-number">*b</span>*(mu_posterior - a)*<span class="hljs-number">*2</span> + b*(b-1)*(std*<span class="hljs-number">*2</span>)) / (len(age) + b - 1))<br><span class="hljs-comment"># Plot the PDF of the posterior distribution</span><br>plt.hist(age, <span class="hljs-attribute">bins</span>=30, <span class="hljs-attribute">density</span>=<span class="hljs-literal">True</span>, <span class="hljs-attribute">alpha</span>=0.6, <span class="hljs-attribute">color</span>=<span class="hljs-string">&#x27;g&#x27;</span>)<br>xmin, xmax = plt.xlim()<br>x = np.linspace(xmin, xmax, 100)<br>p = norm.pdf(x, mu_posterior, std_posterior)<br>plt.plot(x, p, <span class="hljs-string">&#x27;k&#x27;</span>, <span class="hljs-attribute">linewidth</span>=2)<br>title = <span class="hljs-string">&quot;Posterior distribution: mu = %.2f,  std = %.2f&quot;</span> % (mu_posterior, std_posterior)<br>plt.title(title)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p><img src="https://ucarecdn.com/c28be202-f9c2-4063-a877-c09e7719a0bf/Assignment22.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<h2 id="Deduction-Process">Deduction Process</h2>
+<p>In Bayesian statistics, the posterior distribution is calculated by updating the prior distribution based on the observed data. This is done using Bayes’ theorem, which states that the posterior is proportional to the likelihood times the prior.</p>
+<p>In this task, we are asked to fit a numerical variable from the dataset using a normal distribution as the likelihood function, and to use a non-informative prior distribution. The goal is to deduct the posterior distribution.</p>
+<p>Let’s denote:</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span> as the mean of the distribution</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> as the variance of the distribution</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> as the data</li>
+</ul>
+<p>The likelihood function is given by:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>L</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false">(</mo><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup><msup><mo stretchy="false">)</mo><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow></mfrac><msup><mi>e</mi><mrow><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msup></mrow><annotation encoding="application/x-tex">L(\mu, \sigma^2 | X) = \frac{1}{(2\pi\sigma^2)^{n/2}} e^{-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2754em;vertical-align:-0.954em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.296em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.814em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.954em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0773em;"><span style="top:-3.4534em;margin-right:0.05em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8443em;"><span style="top:-2.5062em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9384em;"><span style="top:-2.9384em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.384em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4938em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mop mtight"><span class="mop op-symbol small-op mtight" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7385em;"><span style="top:-2.1786em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3214em;"><span></span></span></span></span></span></span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">μ</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> is the number of observations, and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are the observed values.</p>
+<p>As for the prior distribution, we are asked to use a non-informative prior. A common choice for a non-informative prior for the mean and variance of a normal distribution is the Jeffreys prior, which is proportional to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>σ</mi></mrow><annotation encoding="application/x-tex">1/\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span>.</p>
+<p>Therefore, the prior distribution is given by:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∝</mo><mfrac><mn>1</mn><mi>σ</mi></mfrac></mrow><annotation encoding="application/x-tex">p(\mu, \sigma^2) \propto \frac{1}{\sigma}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>According to Bayes’ theorem, the posterior distribution is proportional to the product of the likelihood and the prior, which can be written as:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>∝</mo><mi>L</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>×</mo><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(\mu, \sigma^2 | X) \propto L(\mu, \sigma^2 | X) \times p(\mu, \sigma^2)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>Substituting the forms of the likelihood and the prior, we get:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>∝</mo><mfrac><mn>1</mn><mrow><mo stretchy="false">(</mo><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup><msup><mo stretchy="false">)</mo><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow></mfrac><msup><mi>e</mi><mrow><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msup><mo>×</mo><mfrac><mn>1</mn><mi>σ</mi></mfrac></mrow><annotation encoding="application/x-tex">p(\mu, \sigma^2 | X) \propto \frac{1}{(2\pi\sigma^2)^{n/2}} e^{-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2} \times \frac{1}{\sigma}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2754em;vertical-align:-0.954em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.296em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.814em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.954em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0773em;"><span style="top:-3.4534em;margin-right:0.05em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8443em;"><span style="top:-2.5062em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9384em;"><span style="top:-2.9384em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.384em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4938em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mop mtight"><span class="mop op-symbol small-op mtight" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7385em;"><span style="top:-2.1786em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3214em;"><span></span></span></span></span></span></span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">μ</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>This is the unnormalized form of the posterior distribution. To get the actual posterior distribution, we would need to normalize this function so that it integrates to 1 over all possible values of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>. However, in practice, we often work with this unnormalized form of the posterior when doing Bayesian inference.</p>
+<h2 id="Task-2">Task 2</h2>
+<p>In this task, we will select the numerical variable ‘Age’ in our data set, then use the distribution above to calculate the hyperparameters. We may need to use software to help your calculation.</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># The hyperparameters of the normal distribution are its mean and </span><br><span class="hljs-comment"># standard deviation</span><br><span class="hljs-comment"># We have already calculated these values in the previous step</span><br>mu_hyperparam = mu_posterior<br>std_hyperparam = std_posterior<br>mu_hyperparam, std_hyperparam<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(26.050577395577392, 52.56197342040169)
+</code></pre>
+<h2 id="Task-3">Task 3</h2>
+<p>In this task, we will use the posterior distribution to sample observations with an appropriate sample size, then compare the sample distribution with our real data distribution. We can use density plot or histogram to do the comparison. We will explain any differences or similarities.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># Sample observations from the posterior distribution</span><br>sample_size = len(age)<br>sample = np.random.normal(mu_hyperparam, std_hyperparam, sample_size)<br><span class="hljs-comment"># Plot the histogram of the sample</span><br>plt.hist(sample, <span class="hljs-attribute">bins</span>=30, <span class="hljs-attribute">density</span>=<span class="hljs-literal">True</span>, <span class="hljs-attribute">alpha</span>=0.6, <span class="hljs-attribute">color</span>=<span class="hljs-string">&#x27;g&#x27;</span>)<br><span class="hljs-comment"># Plot the PDF of the normal distribution using the hyperparameters</span><br>xmin, xmax = plt.xlim()<br>x = np.linspace(xmin, xmax, 100)<br>p = norm.pdf(x, mu_hyperparam, std_hyperparam)<br>plt.plot(x, p, <span class="hljs-string">&#x27;k&#x27;</span>, <span class="hljs-attribute">linewidth</span>=2)<br>title = <span class="hljs-string">&quot;Sample distribution: mu = %.2f,  std = %.2f&quot;</span> <br>% (mu_hyperparam, std_hyperparam)<br>plt.title(title)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p><img src="https://ucarecdn.com/778ab3a0-c2f0-4b65-acad-8388e130f247/Assignment23.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<h2 id="Task-4">Task 4</h2>
+<p>In this task, we will use a gamma distribution as the prior distribution of the variance and a conditional normal distribution given the variance as the prior distribution of the mean, then deduct the kernel function of the posterior distribution.</p>
+<p>In this task, we are asked to use a gamma distribution as the prior distribution of the variance and a conditional normal distribution given the variance as the prior distribution of the mean. Then, we need to deduct the kernel function of the posterior distribution. Here is the mathematical formulation of this process:</p>
+<p>Let’s denote:</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span> as the mean of the distribution</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> as the variance of the distribution</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> as the data</li>
+</ul>
+<p>According to the problem, we have the following prior distributions:</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mi mathvariant="normal">∣</mi><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∼</mo><mi>N</mi><mo stretchy="false">(</mo><msub><mi>μ</mi><mn>0</mn></msub><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">/</mi><msub><mi>κ</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(\mu|\sigma^2) \sim N(\mu_0, \sigma^2/\kappa_0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">/</span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, which is a normal distribution conditioned on the variance</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∼</mo><mi>G</mi><mi>a</mi><mi>m</mi><mi>m</mi><mi>a</mi><mo stretchy="false">(</mo><msub><mi>α</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>β</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(\sigma^2) \sim Gamma(\alpha_0, \beta_0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">G</span><span class="mord mathnormal">amma</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0528em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, which is a gamma distribution</li>
+</ul>
+<p>The likelihood function is given by:</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>X</mi><mi mathvariant="normal">∣</mi><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∼</mo><mi>N</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(X|\mu, \sigma^2) \sim N(\mu, \sigma^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord">∣</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+</ul>
+<p>According to Bayes’ theorem, the posterior distribution is proportional to the product of the likelihood and the prior, which can be written as:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>∝</mo><mi>p</mi><mo stretchy="false">(</mo><mi>X</mi><mi mathvariant="normal">∣</mi><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∗</mo><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mi mathvariant="normal">∣</mi><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>∗</mo><mi>p</mi><mo stretchy="false">(</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(\mu, \sigma^2|X) \propto p(X|\mu, \sigma^2) * p(\mu|\sigma^2) * p(\sigma^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord">∣</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<p>Substituting the forms of the likelihood and the priors, we get:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">∣</mi><mi>X</mi><mo stretchy="false">)</mo><mo>∝</mo><mo stretchy="false">[</mo><msubsup><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow></msqrt></mfrac><msup><mi>e</mi><mfrac><mrow><mo>−</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac></msup><mo stretchy="false">]</mo><mo>∗</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">/</mi><msub><mi>κ</mi><mn>0</mn></msub></mrow></msqrt></mfrac><msup><mi>e</mi><mfrac><mrow><mo>−</mo><mo stretchy="false">(</mo><mi>μ</mi><mo>−</mo><msub><mi>μ</mi><mn>0</mn></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup><mi mathvariant="normal">/</mi><msub><mi>κ</mi><mn>0</mn></msub></mrow></mfrac></msup><mo>∗</mo><mfrac><msubsup><mi>β</mi><mn>0</mn><msub><mi>α</mi><mn>0</mn></msub></msubsup><mrow><mi mathvariant="normal">Γ</mi><mo stretchy="false">(</mo><msub><mi>α</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></mfrac><mo stretchy="false">(</mo><msup><mi>σ</mi><mn>2</mn></msup><msup><mo stretchy="false">)</mo><mrow><mo>−</mo><msub><mi>α</mi><mn>0</mn></msub><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mo>−</mo><msub><mi>β</mi><mn>0</mn></msub><mi mathvariant="normal">/</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow></msup></mrow><annotation encoding="application/x-tex">p(\mu, \sigma^2|X) \propto [\prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} e^{\frac{-(x_i-\mu)^2}{2\sigma^2}}] * \frac{1}{\sqrt{2\pi\sigma^2/\kappa_0}} e^{\frac{-(\mu-\mu_0)^2}{2\sigma^2/\kappa_0}} * \frac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0-1} e^{-\beta_0/\sigma^2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.8994em;vertical-align:-0.538em;"></span><span class="mopen">[</span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∏</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8043em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.5154em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9638em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight" style="padding-left:0.833em;"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-2.9238em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.0762em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.538em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.3614em;"><span style="top:-3.4534em;margin-right:0.05em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2972em;"><span style="top:-2.5062em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9384em;"><span style="top:-2.9384em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.5483em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.6595em;"></span><span class="mord mathnormal mtight">i</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3147em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">μ</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0484em;"><span style="top:-3.0484em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4938em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.3333em;vertical-align:-0.8296em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.4642em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0369em;"><span class="svg-align" style="top:-3.4286em;"><span class="pstrut" style="height:3.4286em;"></span><span class="mord mtight" style="padding-left:1.19em;"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord mtight">/</span><span class="mord mtight"><span class="mord mathnormal mtight">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.0089em;"><span class="pstrut" style="height:3.4286em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.5429em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.5429em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4197em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8296em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.5037em;"><span style="top:-3.6032em;margin-right:0.05em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2864em;"><span style="top:-2.5062em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9384em;"><span style="top:-2.9384em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span><span class="mord mtight">/</span><span class="mord mtight"><span class="mord mathnormal mtight">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">0</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2996em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.5375em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">μ</span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">0</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2996em;"><span></span></span></span></span></span></span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0484em;"><span style="top:-3.0484em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7078em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.6545em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1345em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">Γ</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0037em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.5281em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8664em;"><span style="top:-2.1885em;margin-left:-0.0528em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span><span style="top:-3.0588em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:-0.0037em;margin-right:0.1em;"><span class="pstrut" style="height:2.6444em;"></span><span class="mord mtight">0</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2996em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3115em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0037em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9869em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0528em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mtight">/</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>This is the kernel of the posterior distribution. Note that this is an unnormalized form of the posterior distribution. To get the actual posterior distribution, we would need to normalize this function so that it integrates to 1 over all possible values of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>. However, in practice, we often work with this unnormalized form of the posterior when doing Bayesian inference.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-keyword">from</span> scipy.stats import gamma, norm<br>import numpy as np<br><br><span class="hljs-comment"># Define the parameters of the gamma distribution (prior distribution of the variance)</span><br>alpha, beta = 2, 1<br>age_no_nan = age<br><span class="hljs-comment"># Calculate the mean and variance of the gamma distribution</span><br>mean_gamma, var_gamma = gamma.stats(alpha, <br>                                    <span class="hljs-attribute">scale</span>=1/beta, <span class="hljs-attribute">moments</span>=<span class="hljs-string">&#x27;mv&#x27;</span>)<br><br><span class="hljs-comment"># Calculate the mean and standard deviation of the &#x27;Age&#x27; variable</span><br>mean_age, std_age = np.mean(age_no_nan), np.std(age_no_nan)<br><br><span class="hljs-comment"># Calculate the kernel function of the posterior distribution</span><br><span class="hljs-comment"># The kernel function is proportional to the product of the likelihood and the prior</span><br>kernel = norm.pdf(age_no_nan, <span class="hljs-attribute">loc</span>=mean_age, <span class="hljs-attribute">scale</span>=std_age) <br>* gamma.pdf(std_age*<span class="hljs-number">*2</span>, alpha, <span class="hljs-attribute">scale</span>=1/beta)<br>kernel<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">array([1.53318780e-91, 1.49855820e-91, 1.70835508e-91, 1.65090776e-91,
+       1.65090776e-91, 4.34654474e-92, 2.85791413e-92, 1.73448849e-91,
+       9.83339151e-92, 3.68214775e-92, 2.63829335e-92, 1.41168615e-91,
+       1.43725981e-91, 9.83339151e-92, 3.86393968e-92, 2.85791413e-92,
+       1.75765995e-91, 1.65090776e-91, 1.68895187e-91, 1.05688618e-91,
+       1.75268444e-91, 5.77395867e-92, 1.49855820e-91, 1.34498705e-91,
+       1.37194272e-91, 7.74024118e-93, 1.75268444e-91, 1.23240790e-91,
+       1.47467813e-91, 1.27537261e-91, 9.83339151e-92, 1.37194272e-91,
+       1.73448849e-91, 3.25166411e-92, 1.34498705e-91, 1.27537261e-91,
+       5.19663253e-92, 1.47467813e-91, 7.29119513e-92, 1.76268649e-91,
+       9.17358213e-93, 1.47467813e-91, 1.75872130e-91, 4.14988228e-92,
+       7.69773321e-92, 1.53318780e-91, 1.49855820e-91, 1.01256977e-91,
+       3.68214775e-92, 1.76268649e-91, 1.34498705e-91, 1.20363580e-91,
+       1.70835508e-91, 1.74270267e-91, 1.13055617e-91, 1.47467813e-91,
+       1.70835508e-91, 1.74270267e-91, 1.67464940e-91, 2.44256862e-92,
+       1.76435288e-91, 1.53318780e-91, 1.76268649e-91, 1.75268444e-91,
+       1.20363580e-91, 1.71969239e-91, 1.13055617e-91, 1.58647234e-91,
+       1.63383684e-91, 1.76268649e-91, 1.41168615e-91, 9.39420102e-92,
+       1.70835508e-91, 2.30125845e-92, 3.08260356e-93, 1.58647234e-91,
+       1.68895187e-91, 1.68895187e-91, 1.75268444e-91, 1.47467813e-91,
+       1.71969239e-91, 1.55507371e-91, 1.75268444e-91, 1.47467813e-91,
+       1.49855820e-91, 8.67428674e-92, 1.02005455e-91, 1.53318780e-91,
+       1.41168615e-91, 1.20363580e-91, 1.47467813e-91, 3.39797317e-93,
+       1.76268649e-91, 1.63383684e-91, 2.85791413e-92, 1.47467813e-91,
+       1.73218652e-91, 1.73218652e-91, 4.34654474e-92, 8.39209996e-92,
+       1.63383684e-91, 1.01256977e-91, 1.71969239e-91, 1.41168615e-91,
+       8.67428674e-92, 1.76268649e-91, 1.67464940e-91, 1.58647234e-91,
+       1.34498705e-91, 1.55507371e-91, 1.13055617e-91, 1.63383684e-91,
+       1.53318780e-91, 1.63383684e-91, 1.34498705e-91, 1.27537261e-91,
+       1.34498705e-91, 1.73448849e-91, 6.38505094e-92, 1.58130921e-91,
+       1.23240790e-91, 6.01339590e-92, 1.53318780e-91, 3.63664214e-92,
+       1.33802265e-91, 6.01339590e-92, 1.13055617e-91, 1.76435288e-91,
+       1.08624827e-91, 1.37194272e-91, 1.70835508e-91, 1.20363580e-91,
+       2.49995221e-92, 6.38505094e-92, 1.01256977e-91, 1.75268444e-91,
+       1.72610464e-92, 3.68214775e-92, 2.49995221e-92, 1.47467813e-91,
+       3.41865719e-92, 1.27537261e-91, 6.63727394e-92, 1.76435288e-91,
+       1.60608076e-91, 6.38505094e-92, 2.49995221e-92, 3.68214775e-92,
+       1.01256977e-91, 1.37194272e-91, 1.60608076e-91, 1.74270267e-91,
+       1.34498705e-91, 1.34498705e-91, 3.25166411e-92, 1.08624827e-91,
+       2.63829335e-92, 1.23240790e-91, 1.63383684e-91, 1.75268444e-91,
+       1.68895187e-91, 9.75888104e-92, 1.27537261e-91, 2.85791413e-92,
+       1.74270267e-91, 1.70835508e-91, 1.13055617e-91, 1.37194272e-91,
+       1.63383684e-91, 1.65090776e-91, 1.53318780e-91, 1.76435288e-91,
+       1.75765995e-91, 1.73448849e-91, 1.23240790e-91, 1.74270267e-91,
+       1.76435288e-91, 1.13055617e-91, 1.73448849e-91, 6.01339590e-92,
+       1.49855820e-91, 1.53318780e-91, 1.34498705e-91, 1.44369455e-91,
+       1.27537261e-91, 1.65090776e-91, 1.76268649e-91, 2.30125845e-92,
+       4.14988228e-92, 1.63383684e-91, 1.08624827e-91, 5.77395867e-92,
+       1.34498705e-91, 1.71969239e-91, 1.76268649e-91, 1.53318780e-91,
+       1.76435288e-91, 1.08624827e-91, 1.67464940e-91, 1.63383684e-91,
+       1.55507371e-91, 4.34654474e-92, 1.76268649e-91, 1.48431655e-92,
+       1.76435288e-91, 1.30339398e-91, 1.76268649e-91, 1.76435288e-91,
+       1.65090776e-91, 6.63727394e-92, 3.25166411e-92, 5.42236669e-92,
+       1.37194272e-91, 1.60608076e-91, 1.13055617e-91, 1.67464940e-91,
+       2.63829335e-92, 1.65090776e-91, 1.67464940e-91, 1.30339398e-91,
+       1.55507371e-91, 1.27035462e-92, 1.01256977e-91, 5.19663253e-92,
+       1.65090776e-91, 9.17358213e-93, 1.75268444e-91, 1.13055617e-91,
+       1.34498705e-91, 1.71969239e-91, 1.76435288e-91, 1.53318780e-91,
+       1.23240790e-91, 1.53318780e-91, 1.70835508e-91, 1.34498705e-91,
+       1.60608076e-91, 1.63383684e-91, 1.63383684e-91, 1.61093573e-91,
+       2.85791413e-92, 6.63727394e-92, 1.34498705e-91, 2.47282439e-92,
+       1.20363580e-91, 1.76435288e-91, 1.76435288e-91, 1.63383684e-91,
+       1.27537261e-91, 1.70835508e-91, 1.75268444e-91, 1.15977106e-91,
+       1.70835508e-91, 1.63383684e-91, 4.34654474e-92, 1.75765995e-91,
+       1.37194272e-91, 1.53318780e-91, 1.73448849e-91, 1.76435288e-91,
+       1.53318780e-91, 1.60608076e-91, 1.72610464e-92, 1.60608076e-91,
+       1.75765995e-91, 1.13055617e-91, 9.75888104e-92, 1.49855820e-91,
+       1.13055617e-91, 1.76268649e-91, 1.30339398e-91, 1.01256977e-91,
+       1.01256977e-91, 2.85791413e-92, 1.63383684e-91, 1.75268444e-91,
+       1.67464940e-91, 1.60608076e-91, 1.63383684e-91, 1.37194272e-91,
+       3.25166411e-92, 1.23240790e-91, 1.58647234e-91, 1.05688618e-91,
+       1.67464940e-91, 1.75268444e-91, 1.53318780e-91, 1.49855820e-91,
+       1.37194272e-91, 1.76268649e-91, 1.01256977e-91, 1.65090776e-91,
+       1.76435288e-91, 1.99777577e-92, 1.63383684e-91, 1.67464940e-91,
+       1.27537261e-91, 1.34498705e-91, 1.53318780e-91, 3.25166411e-92,
+       1.53318780e-91, 1.73448849e-91, 1.41168615e-91, 1.34498705e-91,
+       1.23240790e-91, 2.49995221e-92, 1.74270267e-91, 1.65090776e-91,
+       1.27537261e-91, 2.49995221e-92, 1.60608076e-91, 1.20363580e-91,
+       1.60608076e-91, 1.47467813e-91, 1.75268444e-91, 1.58647234e-91,
+       1.63383684e-91, 1.53318780e-91, 1.75765995e-91, 9.39420102e-92,
+       1.58647234e-91, 1.75268444e-91, 1.43725981e-91, 1.70835508e-91,
+       1.47467813e-91, 1.75268444e-91, 1.41168615e-91, 1.68895187e-91,
+       6.01339590e-92, 3.25166411e-92, 1.47467813e-91, 1.71969239e-91,
+       1.08624827e-91, 1.68895187e-91, 1.27537261e-91, 1.76435288e-91,
+       7.02739062e-92, 1.47467813e-91, 1.76268649e-91, 1.75268444e-91,
+       1.27537261e-91, 1.75268444e-91, 1.34498705e-91, 1.74270267e-91,
+       1.75268444e-91, 1.23240790e-91, 1.20363580e-91, 6.63727394e-92,
+       9.83339151e-92, 1.47467813e-91, 1.63383684e-91, 1.08208766e-92,
+       1.75765995e-91, 1.01256977e-91, 1.41168615e-91, 1.67464940e-91,
+       1.75268444e-91, 3.68214775e-92, 9.10578671e-92, 1.68895187e-91,
+       4.14988228e-92, 5.42236669e-92, 1.60608076e-91, 1.76435288e-91,
+       7.29119513e-92, 1.76268649e-91, 9.17358213e-93, 6.63727394e-92,
+       7.97162263e-92, 1.68895187e-91, 8.67428674e-92, 7.97162263e-92,
+       1.49855820e-91, 3.41865719e-92, 2.41590756e-92, 1.49855820e-91,
+       1.71969239e-91, 1.58647234e-91, 1.53318780e-91, 1.68895187e-91,
+       1.76268649e-91, 1.53318780e-91, 2.85791413e-92, 6.38505094e-92,
+       6.63727394e-92, 1.27035462e-92, 1.67464940e-91, 1.65090776e-91,
+       2.63829335e-92, 1.76435288e-91, 6.38505094e-92, 1.47467813e-91,
+       3.86393968e-92, 3.08260356e-93, 1.47467813e-91, 4.34654474e-92,
+       1.67464940e-91, 1.63383684e-91, 1.20363580e-91, 1.47467813e-91,
+       1.55507371e-91, 1.13055617e-91, 1.27537261e-91, 1.71969239e-91,
+       1.75268444e-91, 1.70835508e-91, 1.76268649e-91, 1.60608076e-91,
+       4.34654474e-92, 1.63383684e-91, 8.67428674e-92, 1.68895187e-91,
+       1.60608076e-91, 1.74270267e-91, 1.76435288e-91, 1.53318780e-91,
+       1.08624827e-91, 1.33802265e-91, 6.63727394e-92, 1.43725981e-91,
+       1.58647234e-91, 2.85791413e-92, 1.20363580e-91, 1.76435288e-91,
+       5.19663253e-92, 1.01256977e-91, 1.76435288e-91, 1.53318780e-91,
+       1.60608076e-91, 6.38505094e-92, 7.69773321e-92, 1.74270267e-91,
+       6.63727394e-92, 1.08208766e-92, 1.34498705e-91, 1.71969239e-91,
+       5.77395867e-92, 1.20363580e-91, 1.73448849e-91, 1.53318780e-91,
+       1.53318780e-91, 1.48431655e-92, 7.97162263e-92, 1.43725981e-91,
+       1.60608076e-91, 1.37194272e-91, 1.75268444e-91, 1.63383684e-91,
+       1.34498705e-91, 1.76268649e-91, 1.74270267e-91, 1.48431655e-92,
+       4.86627898e-92, 1.60608076e-91, 1.13055617e-91, 1.34498705e-91,
+       1.68895187e-91, 1.43725981e-91, 1.74270267e-91, 1.67464940e-91,
+       1.43725981e-91, 4.34654474e-92, 1.60608076e-91, 1.27537261e-91,
+       8.67428674e-92, 1.99777577e-92, 1.53318780e-91, 1.65090776e-91,
+       5.42236669e-92, 8.67428674e-92, 1.55507371e-91, 1.60608076e-91,
+       7.29119513e-92, 7.29119513e-92, 1.63383684e-91, 1.08624827e-91,
+       1.65090776e-91, 1.60608076e-91, 1.76435288e-91, 1.73448849e-91,
+       1.53318780e-91, 1.37194272e-91, 1.43725981e-91, 1.65090776e-91,
+       1.63383684e-91, 1.68895187e-91, 1.70835508e-91, 3.68214775e-92,
+       1.70835508e-91, 1.73448849e-91, 1.23240790e-91, 1.41168615e-91,
+       1.47467813e-91, 1.47467813e-91, 1.72610464e-92, 3.01036948e-92,
+       1.47467813e-91, 1.70835508e-91, 4.35883512e-94, 6.01339590e-92,
+       1.74270267e-91, 6.38505094e-92, 1.75268444e-91, 1.74270267e-91,
+       1.75765995e-91, 1.30339398e-91, 1.41168615e-91, 1.63383684e-91,
+       2.85791413e-92, 2.41590756e-92, 7.97162263e-92, 1.34498705e-91,
+       3.41865719e-92, 1.58647234e-91, 1.27537261e-91, 1.47467813e-91,
+       1.27537261e-91, 1.63383684e-91, 1.74270267e-91, 1.58647234e-91,
+       2.63829335e-92, 6.63727394e-92, 1.37194272e-91, 8.67428674e-92,
+       1.60608076e-91, 1.41168615e-91, 1.74270267e-91, 1.67464940e-91,
+       1.15977106e-91, 1.37194272e-91, 1.75765995e-91, 3.74116596e-93,
+       1.75765995e-91, 1.27537261e-91, 1.65509876e-91, 1.27537261e-91,
+       1.15977106e-91, 1.60608076e-91, 1.73448849e-91, 1.41168615e-91,
+       9.83339151e-92, 1.99777577e-92, 1.67464940e-91, 9.83339151e-92,
+       1.34498705e-91, 1.27537261e-91, 1.05688618e-91, 1.75765995e-91,
+       3.68214775e-92, 1.67464940e-91, 1.99777577e-92, 5.42236669e-92,
+       1.08624827e-91, 7.29119513e-92, 1.23240790e-91, 1.27537261e-91,
+       1.65090776e-91, 1.27537261e-91, 1.67464940e-91, 1.70835508e-91,
+       1.43725981e-91, 1.01256977e-91, 1.23240790e-91, 1.53318780e-91,
+       1.63383684e-91, 7.97162263e-92, 1.76268649e-91, 5.42236669e-92,
+       1.34498705e-91, 1.49855820e-91, 1.73448849e-91, 1.71969239e-91,
+       4.65488950e-92, 1.20363580e-91, 1.68895187e-91, 6.63727394e-92,
+       1.73448849e-91, 1.41168615e-91, 1.76435288e-91, 1.67464940e-91,
+       1.67464940e-91, 1.76268649e-91, 7.69773321e-92, 1.58647234e-91,
+       1.58647234e-91, 1.75872130e-91, 7.97162263e-92, 1.65090776e-91,
+       1.60608076e-91, 1.47467813e-91, 1.63383684e-91, 1.75765995e-91,
+       3.74116596e-93, 1.13055617e-91, 1.76435288e-91, 1.34498705e-91,
+       1.75765995e-91, 3.68214775e-92, 4.65488950e-92, 1.71969239e-91,
+       1.58647234e-91, 7.97162263e-92, 2.38946494e-92, 1.75268444e-91,
+       1.27537261e-91, 1.68895187e-91, 1.71969239e-91, 1.30339398e-91,
+       1.41168615e-91, 1.60608076e-91, 1.13055617e-91, 6.01339590e-92,
+       1.76204816e-91, 1.74270267e-91, 1.63383684e-91, 7.97162263e-92,
+       3.01036948e-92, 4.34654474e-92, 1.27537261e-91, 4.14988228e-92,
+       1.15977106e-91, 9.10578671e-92, 1.20363580e-91, 1.76268649e-91,
+       1.67464940e-91, 1.67464940e-91, 1.27537261e-91, 5.77395867e-92,
+       2.49995221e-92, 9.39420102e-92, 1.13055617e-91, 1.67464940e-91,
+       1.43725981e-91, 7.29119513e-92, 1.75765995e-91, 1.76435288e-91,
+       1.76435288e-91, 1.68895187e-91, 1.75765995e-91, 7.69773321e-92,
+       2.30823084e-92, 1.73448849e-91, 1.75765995e-91, 1.43725981e-91,
+       1.27537261e-91, 1.43725981e-91, 1.71969239e-91, 1.70835508e-91,
+       1.43725981e-91, 1.65090776e-91, 4.65488950e-92, 1.76204816e-91,
+       1.58647234e-91, 1.75765995e-91, 1.15977106e-91, 7.02739062e-92,
+       5.42236669e-92, 1.73448849e-91, 1.49855820e-91, 1.73448849e-91,
+       2.85791413e-92, 2.49995221e-92, 1.48431655e-92, 1.05688618e-91,
+       2.44256862e-92, 1.58647234e-91, 1.27537261e-91, 1.43725981e-91,
+       1.47467813e-91, 1.74270267e-91, 1.41168615e-91, 1.13055617e-91,
+       1.76435288e-91, 1.67081230e-91, 1.20363580e-91, 1.23240790e-91,
+       1.65090776e-91, 1.75268444e-91, 3.68214775e-92, 1.67603843e-93,
+       6.38505094e-92, 1.13055617e-91, 1.08624827e-91, 1.27537261e-91,
+       1.01256977e-91, 6.01339590e-92, 1.63383684e-91, 1.30339398e-91,
+       1.47467813e-91, 7.97162263e-92, 1.63383684e-91, 1.23240790e-91,
+       1.73448849e-91, 1.75765995e-91, 3.68214775e-92, 1.70835508e-91,
+       8.67428674e-92, 1.71969239e-91, 8.67428674e-92, 1.75268444e-91,
+       1.05688618e-91, 1.41168615e-91, 1.34498705e-91, 3.41865719e-92,
+       1.67464940e-91, 1.71969239e-91, 1.53318780e-91, 1.75268444e-91,
+       1.67464940e-91, 1.43725981e-91, 1.73448849e-91, 1.34498705e-91,
+       1.70835508e-91, 1.74270267e-91])
+</code></pre>
+<h2 id="Task-5">Task 5</h2>
+<p>In this task, we will use the kernel function of the posterior distribution to sample observations with an appropriate sample size, then compare the sample distribution with our real data distribution. We can use density plot or histogram to do the comparison. We will explain any differences or similarities.</p>
+<p>First, let’s sample observations from the kernel function of the posterior distribution. The sample size will be the same as the number of observations in the ‘Age’ variable.</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs maxima">sample_size = len(age_no_nan)<br>sample_kernel = <span class="hljs-built_in">np</span>.<span class="hljs-built_in">random</span>.choice(age_no_nan, size=sample_size,<br>                                 p=kernel/<span class="hljs-built_in">np</span>.<span class="hljs-built_in">sum</span>(kernel))<br>sample_kernel<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">array([19.  , 43.  , 39.  , 20.  , 26.  , 18.  , 29.  , 16.  , 22.  ,
+       37.  , 14.  , 20.  , 40.  , 48.  , 28.  , 29.  , 20.  ,  7.  ,
+       28.  , 45.  , 39.  , 22.  , 31.  , 47.  , 27.  , 36.  , 24.  ,
+       20.  , 19.  , 29.  , 39.  , 40.  , 43.  , 25.  , 29.  , 21.  ,
+       23.  , 20.  , 25.  , 22.  , 35.  , 41.  , 22.  ,  3.  , 27.  ,
+       22.  , 27.  , 47.  , 35.  , 20.  , 11.  , 27.  , 18.  , 18.  ,
+       33.  , 23.  , 39.  , 18.  , 59.  , 26.  , 25.  , 16.  , 29.  ,
+       31.  , 25.  , 28.  , 35.  , 36.  , 29.  , 24.  , 34.  , 30.  ,
+       18.  , 31.  , 47.  , 28.  , 18.  , 46.  , 31.  , 29.  , 29.  ,
+       35.  , 35.  , 22.  , 32.  , 18.  , 45.  , 26.  , 25.  , 36.  ,
+       33.  , 33.  , 24.  ,  4.  , 24.  , 35.  , 17.  , 31.  , 22.  ,
+       28.  , 20.  , 24.  , 36.  , 36.  , 25.  , 34.  , 27.  , 22.  ,
+       40.  , 21.  , 24.  , 27.  , 32.  , 19.  , 51.  , 28.  , 25.  ,
+       45.5 , 21.  , 31.  , 35.  , 32.  , 39.  , 30.  , 33.  , 33.  ,
+       28.  , 22.  , 25.  , 24.  , 19.  , 26.  , 32.  , 18.  , 22.  ,
+       19.  , 36.  , 19.  , 29.  , 32.  , 40.  , 35.  , 23.5 , 39.  ,
+       26.  , 18.  , 47.  , 32.  , 19.  , 35.  , 22.  , 18.  , 35.  ,
+       22.  , 31.  , 28.  , 35.  , 35.  , 11.  , 36.  , 27.  , 35.  ,
+       20.  , 18.  , 46.  , 30.  , 45.  , 48.  , 24.  , 38.  , 27.  ,
+       28.  , 21.  , 35.  , 45.  , 19.  , 26.  , 22.  , 32.  , 27.  ,
+       39.  , 29.  , 50.  , 27.  , 24.  , 11.  , 27.  , 44.  , 58.  ,
+       39.  , 21.  , 22.  ,  4.  , 17.  , 19.  , 49.  , 24.  ,  6.  ,
+       30.  , 30.  , 28.  , 33.  , 35.  , 22.  , 30.  , 40.  , 55.  ,
+       50.  , 32.  , 44.  , 25.  , 21.  , 54.  , 33.  , 18.  , 32.5 ,
+       28.  , 29.  , 36.  , 34.  , 32.  , 31.  , 40.  , 39.  , 21.  ,
+       45.  , 45.  , 17.  , 37.  , 32.  , 33.  , 24.  , 26.  , 30.  ,
+       35.  , 25.  , 23.  , 20.  , 23.  , 40.  , 42.  , 19.  , 31.  ,
+       30.  , 22.  , 25.  , 22.  , 28.  , 47.  , 25.  , 30.  , 15.  ,
+       32.5 , 40.  , 20.  , 27.  , 29.  , 24.  , 19.  , 28.  , 30.  ,
+       34.  , 23.  , 28.5 , 21.  , 21.  , 28.5 , 24.  , 34.  , 28.  ,
+       38.  , 24.  , 27.  , 35.  , 27.  , 17.  , 28.  , 31.  , 35.  ,
+       14.5 , 25.  , 48.  , 25.  , 21.  , 34.  , 36.  , 20.  , 18.  ,
+       29.  , 41.  , 31.  , 18.  , 25.  , 32.  , 20.  , 18.  , 36.  ,
+       18.  , 13.  , 39.  , 42.  , 29.  , 44.  , 32.  , 29.  , 39.  ,
+       33.  , 40.  , 25.  , 27.  , 25.  , 36.  , 24.  , 45.  , 35.  ,
+       32.5 , 30.  , 19.  , 36.  , 37.  , 32.  , 31.  , 30.  , 26.  ,
+       25.  , 29.  , 19.  , 16.  , 36.  , 49.  , 30.  , 45.  , 25.  ,
+       22.  , 30.  , 22.  , 27.  , 42.  , 37.  , 20.  , 23.  , 23.  ,
+       22.  , 24.  , 18.  , 26.  , 24.  , 39.  , 38.  , 18.  , 47.  ,
+       38.  , 28.  , 22.  , 24.  , 20.  , 48.  , 15.  , 40.  , 34.  ,
+       36.  , 14.  , 24.  ,  9.  , 24.  , 18.  , 42.  , 17.  , 38.  ,
+       34.  , 15.  , 23.5 , 46.  , 31.  , 19.  , 46.  , 24.  , 30.  ,
+       43.  , 25.  , 21.  , 47.  , 45.5 , 21.  , 26.  , 27.  , 18.  ,
+       30.  , 31.  , 49.  , 27.  , 18.  , 21.  , 29.  , 18.  , 18.  ,
+       17.  , 39.  , 40.  , 25.  , 24.  , 21.  , 60.  , 40.  , 26.  ,
+       27.  , 14.  , 37.  , 18.  , 20.  , 31.  , 39.  , 48.  , 45.  ,
+       26.  , 16.  , 30.  , 31.  , 19.  , 40.  , 22.  , 27.  , 20.5 ,
+       17.  , 28.  , 19.  , 17.  , 23.  , 20.  , 25.  , 17.  , 14.  ,
+       22.  , 25.  , 31.  , 32.  ,  4.  , 54.  , 22.  , 33.  , 23.  ,
+       29.  , 27.  ,  9.  ,  2.  , 33.  , 35.  , 23.  , 40.  , 39.  ,
+        1.  , 28.  , 26.  , 24.  , 35.  , 41.  , 22.  , 11.  , 20.  ,
+       35.  , 47.  , 24.  , 18.  , 22.  , 44.  , 33.  , 40.  , 28.  ,
+       24.5 , 27.  , 42.  , 37.  , 17.  , 26.  , 23.  , 19.  , 42.  ,
+       31.  , 31.  , 28.  , 27.  , 48.  , 33.  , 35.  , 41.  , 25.  ,
+       32.  , 32.  , 21.  , 45.5 ,  0.83, 40.  , 25.  , 36.  , 26.  ,
+       40.  , 18.  , 35.  , 27.  , 48.  , 21.  , 54.  , 26.  , 42.  ,
+       45.  , 29.  , 28.5 , 20.  , 33.  , 53.  , 34.  , 21.  , 35.  ,
+        6.  , 41.  , 17.  , 40.  , 22.  , 39.  , 29.  , 28.  , 17.  ,
+        4.  , 36.  , 28.  , 39.  , 16.  , 23.  ,  1.  , 24.  , 18.  ,
+       26.  , 24.  , 21.  , 28.  , 22.  , 40.  , 16.  , 26.  , 45.  ,
+       25.  , 23.  , 25.  , 35.  , 19.  , 43.  , 33.  , 40.  , 23.  ,
+       24.  , 37.  , 16.  , 37.  , 24.  , 26.  , 15.  , 23.  , 36.  ,
+       27.  , 17.  , 59.  , 19.  , 25.  , 44.  , 24.  , 48.  , 32.  ,
+       21.  , 37.  , 47.  , 27.  , 28.  , 25.  , 30.  , 19.  , 41.  ,
+       25.  , 18.  , 20.  , 35.  , 21.  ,  9.  , 21.  , 24.  , 35.  ,
+       23.  , 21.  , 18.  , 36.  , 24.  , 23.  , 40.  , 44.  , 23.  ,
+       27.  , 32.  , 25.  , 24.  , 25.  , 43.  , 35.  , 47.  ,  9.  ,
+       14.  , 19.  , 26.  , 24.  ,  8.  , 19.  , 39.  , 45.  , 29.  ,
+        8.  , 42.  ,  0.75, 23.  , 21.  ,  4.  , 22.  , 44.  , 26.  ,
+       37.  , 18.  , 22.  , 20.  , 30.  ,  4.  , 29.  , 24.  , 18.  ,
+       26.  , 18.  , 28.  , 30.  , 42.  , 24.  , 29.  , 22.  , 33.  ,
+       25.  , 44.  , 24.  , 25.  , 23.  , 44.  , 30.  , 27.  , 28.  ,
+       45.  , 24.  , 23.  , 30.  , 29.  , 21.  , 18.  , 33.  , 18.  ,
+       24.  , 32.  , 39.  , 36.  , 22.  , 42.  , 28.  , 19.  , 48.  ,
+       23.  , 30.  , 48.  , 36.  , 30.  , 28.  , 26.  , 21.  , 40.5 ,
+       36.  , 18.  , 28.  , 30.  , 31.  , 19.  ,  5.  , 23.5 , 21.  ,
+        9.  , 33.  , 29.  , 22.  , 28.  , 30.  , 21.  , 34.  , 50.  ,
+       26.  , 22.  , 37.  , 25.  , 31.  , 29.  , 33.  , 24.  , 38.  ,
+       18.  , 48.  , 31.  , 24.  , 39.  , 39.  , 33.  , 21.  , 30.5 ,
+       32.  , 42.  , 21.  ])
+</code></pre>
+<p>Now that we have sampled observations from the kernel function of the posterior distribution, let’s compare this sample distribution with the actual ‘Age’ distribution. We will use a histogram for this comparison.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs routeros">import matplotlib.pyplot as plt<br><br>plt.figure(figsize=(12, 6))<br>plt.hist(age_no_nan, <span class="hljs-attribute">bins</span>=30, <span class="hljs-attribute">alpha</span>=0.5, <span class="hljs-attribute">label</span>=<span class="hljs-string">&#x27;Actual Age Distribution&#x27;</span>)<br>plt.hist(sample_kernel, <span class="hljs-attribute">bins</span>=30, <span class="hljs-attribute">alpha</span>=0.5, <span class="hljs-attribute">label</span>=<span class="hljs-string">&#x27;Sampled Age Distribution&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;Comparison of Actual and Sampled Age Distributions&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Age&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Frequency&#x27;</span>)<br>plt.legend()<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p><img src="https://ucarecdn.com/20d480ec-7b78-4a56-bd5d-b50e88f00c12/Assignment24.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>From the histogram above, we can see that the sampled age distribution (orange) closely matches the actual age distribution (blue). This indicates that our posterior distribution is a good model for the ‘Age’ variable in the dataset.</p>
+<p>However, there may be some differences due to the randomness in the sampling process. Also, the match may not be perfect because the true distribution of ‘Age’ may not be exactly a normal distribution, and our model is a simplification of the reality.</p>
+<p>In conclusion, we have successfully used a gamma distribution as the prior distribution of the variance and a conditional normal distribution given the variance as the prior distribution of the mean, then deducted the kernel function of the posterior distribution. The sampled observations from the kernel function of the posterior distribution closely match the actual data distribution, which indicates that our Bayesian model is a good fit for the data.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Assignment/" class="category-chain-item">Assignment</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Bayesian-Statistics/">#Bayesian Statistics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Bayesian Statistics - Assignment 2</div>
+      <div>https://dseidhit.github.io/2023/05/22/Bayesian Statistics - Assignment 2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Mo Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 22, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/05/22/Statistics_exercise7_2/" title="Statistical Machine Learning Exercise 7.2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Statistical Machine Learning Exercise 7.2</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://dseid.top" target="_blank" rel="nofollow noopener"><span>By</span></a> <a href="https://dseid.top" target="_blank" rel="nofollow noopener"><span>Dseid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
